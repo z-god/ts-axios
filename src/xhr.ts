@@ -16,7 +16,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       request.timeout = timeout
     }
 
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     // 接收到响应
     request.onreadystatechange = function handleLoad() {
