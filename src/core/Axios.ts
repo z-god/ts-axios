@@ -1,4 +1,4 @@
-import { extend } from '../helpers/util'
+import { assign } from '../helpers/util'
 import { AxiosPromise, AxiosRequestConfig, Method } from '../types'
 import dispatchRequest from './dispatchRequest'
 
@@ -37,7 +37,7 @@ export default class Axios {
 
   _requestMethodWithoutData(method: Method, url: string, config?: AxiosRequestConfig) {
     return this.request(
-      extend(config || {}, {
+      assign(config || {}, {
         method,
         url
       })
@@ -46,7 +46,7 @@ export default class Axios {
 
   _requestMethodWithData(method: Method, url: string, data?: any, config?: AxiosRequestConfig) {
     return this.request(
-      extend(config || {}, {
+      assign(config || {}, {
         method,
         url,
         data
