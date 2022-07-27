@@ -1,3 +1,5 @@
+import { Interceptors } from '../core/Axios'
+
 export interface AxiosRequestConfig {
   url?: string
   method?: Method
@@ -44,6 +46,8 @@ export interface AxiosError extends Error {
 }
 
 export interface Axios {
+  interceptors: Interceptors
+
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
