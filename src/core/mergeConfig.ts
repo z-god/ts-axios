@@ -39,4 +39,6 @@ export default function mergeConfig(config1: AxiosRequestConfig, config2: AxiosR
     const start = starts[key] || defaultStart
     config[key] = start(config1[key], config2[key])
   }
+
+  return config
 }
