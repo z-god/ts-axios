@@ -1,21 +1,40 @@
+import { deepMerge, isPlainObject } from '../helpers/util'
 import { AxiosRequestConfig } from '../types'
 
-const starts = Object.create(null)
+const strats = Object.create(null)
 
-function defaultStart(val1: any, val2: any) {
+function defaultStrat(val1: any, val2: any) {
   return typeof val2 !== 'undefined' ? val2 : val1
 }
 
-function fromVal2Start(val1: any, val2: any) {
+function fromVal2Strat(val1: any, val2: any) {
   if (typeof val2 !== 'undefined') {
     return val2
   }
 }
 
-const startkeysFromVal2 = ['url', 'params', 'data']
+function deepMergeStrat(val1: any, val2: any) {
+  if (isPlainObject(val2)) {
+    return deepMerge(val1, val2)
+  } else if (typeof val2 !== 'undefined') {
+    return val2
+  } else if (isPlainObject(val1)) {
+    return deepMerge(val1)
+  } else if (typeof val1 !== 'undefined') {
+    return val1
+  }
+}
 
-startkeysFromVal2.forEach(key => {
-  starts[key] = fromVal2Start
+const stratKeysFromVal2 = ['url', 'params', 'data']
+
+stratKeysFromVal2.forEach(key => {
+  strats[key] = fromVal2Strat
+})
+
+const stratKeysDeepMerge = ['headers']
+
+stratKeysDeepMerge.forEach(key => {
+  strats[key] = deepMergeStrat
 })
 
 export default function mergeConfig(config1: AxiosRequestConfig, config2: AxiosRequestConfig) {
@@ -36,8 +55,8 @@ export default function mergeConfig(config1: AxiosRequestConfig, config2: AxiosR
   }
 
   function mergeField(key: string): void {
-    const start = starts[key] || defaultStart
-    config[key] = start(config1[key], config2[key])
+    const strat = strats[key] || defaultStrat
+    config[key] = strat(config1[key], config2[key])
   }
 
   return config
