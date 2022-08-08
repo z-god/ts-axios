@@ -1,3 +1,9 @@
+/*
+ * @Date: 2022-08-08 20:12:33
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-08-08 21:27:12
+ * @FilePath: \ts-axios\src\types\index.ts
+ */
 import { Interceptors } from '../core/Axios'
 
 export interface AxiosRequestConfig {
@@ -78,6 +84,10 @@ export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+
+export interface AxiosStatic extends AxiosInstance {
+  create(config: AxiosRequestConfig): AxiosInstance
 }
 
 export interface AxiosInterceptorManager<T> {
