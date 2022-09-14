@@ -26,8 +26,12 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     }
 
     if (withCredentials) {
+      console.log(withCredentials)
+
       request.withCredentials = withCredentials
     }
+
+    console.log('request', request)
 
     request.open(method.toUpperCase(), url!, true)
 
