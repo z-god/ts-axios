@@ -1,5 +1,7 @@
+import cookie from './helpers/cookie'
 import { createError } from './helpers/error'
 import { parseHeaders } from './helpers/headers'
+import { isURLSameOrigin } from './helpers/url'
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
@@ -13,7 +15,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       responseType,
       timeout,
       cancelToken,
-      withCredentials
+      withCredentials,
+      xsrfCookieName,
+      xsrfHeaderName
     } = config
     // 创建request对象
     const request = new XMLHttpRequest()
@@ -67,6 +71,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     // 网络错误
     request.onerror = function handleError() {
       reject(createError('Network Error', config, null, request))
+    }
+
+    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+      const xsrfValue = cookie.read(xsrfCookieName)
+      if (xsrfValue && xsrfHeaderName) {
+        headers[xsrfHeaderName] = xsrfValue
+      }
     }
 
     Object.keys(headers).forEach(name => {
