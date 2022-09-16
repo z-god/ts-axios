@@ -15,7 +15,7 @@ export function isPlainObject(val: any): val is Object {
 }
 
 export function isFormData(val: any): val is FormData {
-  return typeof val != 'undefined' && val instanceof FormData
+  return typeof val !== 'undefined' && val instanceof FormData
 }
 
 export const assign = Object.assign
